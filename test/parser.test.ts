@@ -6,7 +6,7 @@ test("minutes", () => {
     expect(getValues('45-50', 0)).toEqual([45, 46, 47, 48, 49, 50])
     expect(getValues('*/15', 0)).toEqual([0, 15, 30, 45])
     expect(getValues('59-59', 0)).toEqual([59])
-    expect(getValues('24,27,35', 0)).toEqual([24, 27, 35])    
+    expect(getValues('24,27,35', 0)).toEqual([24, 27, 35])
 
     // error cases
     expect(() => {
@@ -41,7 +41,7 @@ test("hours", () => {
     expect(getValues('10-15', 1)).toEqual([10, 11, 12, 13, 14, 15])
     expect(getValues('*/5', 1)).toEqual([0, 5, 10, 15, 20])
     expect(getValues('23-23', 1)).toEqual([23])
-    expect(getValues('16,19,21', 1)).toEqual([16, 19, 21])    
+    expect(getValues('16,19,21', 1)).toEqual([16, 19, 21])
 
     // error cases
     expect(() => {
@@ -76,7 +76,7 @@ test("daysOfMonth", () => {
     expect(getValues('10-15', 2)).toEqual([10, 11, 12, 13, 14, 15])
     expect(getValues('*/5', 2)).toEqual([5, 10, 15, 20, 25, 30])
     expect(getValues('31-31', 2)).toEqual([31])
-    expect(getValues('16,19,21,29,31', 2)).toEqual([16, 19, 21, 29, 31])    
+    expect(getValues('16,19,21,29,31', 2)).toEqual([16, 19, 21, 29, 31])
 
     // error cases
     expect(() => {
@@ -111,7 +111,7 @@ test("months", () => {
     expect(getValues('6-12', 3)).toEqual([6, 7, 8, 9, 10, 11, 12])
     expect(getValues('*/5', 3)).toEqual([5, 10])
     expect(getValues('12-12', 3)).toEqual([12])
-    expect(getValues('3,8,9,11', 3)).toEqual([3, 8, 9, 11])    
+    expect(getValues('3,8,9,11', 3)).toEqual([3, 8, 9, 11])
 
     // error cases
     expect(() => {
@@ -146,7 +146,7 @@ test("daysOfWeek", () => {
     expect(getValues('3-6', 4)).toEqual([3, 4, 5, 6])
     expect(getValues('*/5', 4)).toEqual([0, 5])
     expect(getValues('6-6', 4)).toEqual([6])
-    expect(getValues('0,1,4,5,6', 4)).toEqual([0, 1, 4, 5, 6])    
+    expect(getValues('0,1,4,5,6', 4)).toEqual([0, 1, 4, 5, 6])
 
     // error cases
     expect(() => {
