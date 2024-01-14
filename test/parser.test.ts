@@ -1,6 +1,6 @@
 import { getValues } from "../src/parser"
 
-test.only("minutes", () => {
+test("minutes", () => {
     expect(getValues('0', 0)).toEqual([0])
     expect(getValues('0-5', 0)).toEqual([0, 1, 2, 3, 4, 5])
     expect(getValues('45-50', 0)).toEqual([45, 46, 47, 48, 49, 50])
@@ -35,7 +35,7 @@ test.only("minutes", () => {
 });
 
 
-test.only("hours", () => {
+test("hours", () => {
     expect(getValues('0', 1)).toEqual([0])
     expect(getValues('0-5', 1)).toEqual([0, 1, 2, 3, 4, 5])
     expect(getValues('10-15', 1)).toEqual([10, 11, 12, 13, 14, 15])
@@ -71,28 +71,28 @@ test.only("hours", () => {
 
 
 test("daysOfMonth", () => {
-    expect(getValues('0', 2)).toEqual([0])
-    expect(getValues('0-5', 2)).toEqual([0, 1, 2, 3, 4, 5])
+    expect(getValues('1', 2)).toEqual([1])
+    expect(getValues('1-5', 2)).toEqual([1, 2, 3, 4, 5])
     expect(getValues('10-15', 2)).toEqual([10, 11, 12, 13, 14, 15])
-    expect(getValues('*/5', 2)).toEqual([0, 5, 10, 15, 20])
-    expect(getValues('23-23', 2)).toEqual([59])
-    expect(getValues('16,19,21', 2)).toEqual([16, 19, 21])    
+    expect(getValues('*/5', 2)).toEqual([5, 10, 15, 20, 25, 30])
+    expect(getValues('31-31', 2)).toEqual([31])
+    expect(getValues('16,19,21,29,31', 2)).toEqual([16, 19, 21, 29, 31])    
 
     // error cases
     expect(() => {
-        getValues('6-5', 2)
+        getValues('28-26', 2)
     }).toThrow(Error);
 
     expect(() => {
-        getValues('13-24', 2)
+        getValues('13-32', 2)
     }).toThrow(Error);
 
     expect(() => {
-        getValues('24-100', 2)
+        getValues('32-100', 2)
     }).toThrow(Error);
 
     expect(() => {
-        getValues('23-25', 2)
+        getValues('29-33', 2)
     }).toThrow(Error);
 
     expect(() => {
@@ -106,32 +106,32 @@ test("daysOfMonth", () => {
 
 
 test("months", () => {
-    expect(getValues('0', 3)).toEqual([0])
-    expect(getValues('0-5', 3)).toEqual([0, 1, 2, 3, 4, 5])
-    expect(getValues('10-15', 3)).toEqual([10, 11, 12, 13, 14, 15])
-    expect(getValues('*/5', 3)).toEqual([0, 5, 10, 15, 20])
-    expect(getValues('23-23', 3)).toEqual([59])
-    expect(getValues('16,19,21', 3)).toEqual([16, 19, 21])    
+    expect(getValues('1', 3)).toEqual([1])
+    expect(getValues('1-5', 3)).toEqual([1, 2, 3, 4, 5])
+    expect(getValues('6-12', 3)).toEqual([6, 7, 8, 9, 10, 11, 12])
+    expect(getValues('*/5', 3)).toEqual([5, 10])
+    expect(getValues('12-12', 3)).toEqual([12])
+    expect(getValues('3,8,9,11', 3)).toEqual([3, 8, 9, 11])    
 
     // error cases
     expect(() => {
-        getValues('6-5', 3)
+        getValues('10-9', 3)
     }).toThrow(Error);
 
     expect(() => {
-        getValues('13-24', 3)
+        getValues('10-13', 3)
     }).toThrow(Error);
 
     expect(() => {
-        getValues('24-100', 3)
+        getValues('13-100', 3)
     }).toThrow(Error);
 
     expect(() => {
-        getValues('23-25', 3)
+        getValues('12-13', 3)
     }).toThrow(Error);
 
     expect(() => {
-        getValues('10,11,15/2', 3)
+        getValues('5,11,12/2', 3)
     }).toThrow(Error);
 
     expect(() => {
@@ -143,10 +143,10 @@ test("months", () => {
 test("daysOfWeek", () => {
     expect(getValues('0', 4)).toEqual([0])
     expect(getValues('0-5', 4)).toEqual([0, 1, 2, 3, 4, 5])
-    expect(getValues('10-15', 4)).toEqual([10, 11, 12, 13, 14, 15])
-    expect(getValues('*/5', 4)).toEqual([0, 5, 10, 15, 20])
-    expect(getValues('23-23', 4)).toEqual([59])
-    expect(getValues('16,19,21', 4)).toEqual([16, 19, 21])    
+    expect(getValues('3-6', 4)).toEqual([3, 4, 5, 6])
+    expect(getValues('*/5', 4)).toEqual([0, 5])
+    expect(getValues('6-6', 4)).toEqual([6])
+    expect(getValues('0,1,4,5,6', 4)).toEqual([0, 1, 4, 5, 6])    
 
     // error cases
     expect(() => {
@@ -154,19 +154,19 @@ test("daysOfWeek", () => {
     }).toThrow(Error);
 
     expect(() => {
-        getValues('13-24', 4)
+        getValues('5-7', 4)
     }).toThrow(Error);
 
     expect(() => {
-        getValues('24-100', 4)
+        getValues('7-100', 4)
     }).toThrow(Error);
 
     expect(() => {
-        getValues('23-25', 4)
+        getValues('6-7', 4)
     }).toThrow(Error);
 
     expect(() => {
-        getValues('10,11,15/2', 4)
+        getValues('0,2,3/2', 4)
     }).toThrow(Error);
 
     expect(() => {

@@ -12,10 +12,11 @@ const main = () => {
         return;
     }
 
-    const [minutes, hours, daysOfMonth, months, daysOfWeek, command] = cronExpression.split(' ');
+    const splitted = cronExpression.split(' ');
+    const command = splitted.pop()
 
-    const values = [minutes, hours, daysOfMonth, months, daysOfWeek].map((section, index) => {
-        return getValues(section, index)
+    const values = splitted.map((cronExpressionSection, index) => {
+        return getValues(cronExpressionSection, index).join(' ')
     })
 
     console.log('minute        ', values[0])
