@@ -2,62 +2,71 @@ const isAny = (input: string) => input === '*';
 const isList = (input: string) => input.includes(',');
 const isRange = (input: string) => input.includes('-');
 const isStep = (input: string) => input.includes('/');
-const isNumeric = (num: any) => (typeof (num) === 'number' || typeof (num) === "string" && num.trim() !== '') && !isNaN(num as number);
+const isNumeric = (num: any) => (
+    typeof (num) === 'number' ||
+    typeof (num) === "string" &&
+    num.trim() !== ''
+) && !isNaN(num as number);
 
 const createArray = (start: number, end: number) => {
     return Array.from({ length: end - start + 1 }, (_, index) => start + index);
 }
-type RangeType = 'minutes' | 'hours' | 'daysOfMonth' | 'months' | 'daysOfWeek';
 
-const getMinMaxValues = (type: RangeType) => {
+const getMinMaxValues = (index: number) => {
     let min: number;
     let max: number;
 
-    switch (type) {
-        case 'minutes':
+    switch (index) {
+        // minutes
+        case 0:
             min = 0;
             max = 59;
             break;
-        case 'hours':
+        // hours
+        case 1:
             min = 0;
             max = 23;
             break;
-        case 'daysOfMonth':
+        // daysOfMonth
+        case 2:
             min = 1;
             max = 31;
             break;
-        case 'months':
+        // months
+        case 3:
             min = 1;
             max = 12;
             break;
-        case 'daysOfWeek':
+        // daysOfWeek
+        case 4:
             min = 0;
             max = 6;
             break;
+        default:
+            throw new Error('Invalid index!')
     }
 
     return [min, max];
 }
 
-const generateRangeValues = (range: string, type: RangeType) => {
+const generateRangeValues = (range: string, index: number) => {
     const [minStr, maxStr] = range.split('-')
     const min = Number(minStr.trim());
     const max = Number(maxStr.trim());
 
-    const [minLimit, maxLimit] = getMinMaxValues(type)
+    const [minLimit, maxLimit] = getMinMaxValues(index)
 
     if (min < minLimit || min > maxLimit || max < minLimit || max > maxLimit || max < min) {
-        throw new Error(`Invalid ${type} range! ${type} ranges must be between ${minLimit} and ${maxLimit} inclusive,
+        throw new Error(`Invalid range ${range}! Range must be between ${minLimit} and ${maxLimit} inclusive,
         and the right side must not be less than the left side!`)
     }
 
     return createArray(min, max)
 }
 
-
-export const getMinutes = (input: string): number[] => {
+export const getValues = (input: string, index: number): number[] => {
+    const [min, max] = getMinMaxValues(index);
     if (isAny(input)) {
-        const [min, max] = getMinMaxValues('minutes');
         return createArray(min, max)
     }
 
@@ -65,15 +74,15 @@ export const getMinutes = (input: string): number[] => {
         const [left, right] = input.split('/');
 
         if (isAny(left)) {
-            return createArray(0, 59).filter(val => val % Number(right) === 0)
+            return createArray(min, max).filter(val => val % Number(right) === 0)
         }
 
         else if (isRange(left)) {
-            return generateRangeValues(left, 'minutes').filter(val => val % Number(right) === 0)
+            return generateRangeValues(left, index).filter(val => val % Number(right) === 0)
         }
 
         else {
-            throw new Error('Invalid minutes syntax! Steps can only be used with * or with ranges. For example: */15 or 5-30/5')
+            throw new Error('Invalid syntax! Steps can only be used with * or with ranges.')
         }
     }
 
@@ -82,51 +91,12 @@ export const getMinutes = (input: string): number[] => {
     }
 
     if (isRange(input)) {
-        return generateRangeValues(input, 'minutes')
+        return generateRangeValues(input, index)
     }
 
     if (isNumeric(input)) {
         return [Number(input)];
     }
 
-    throw new Error('Invalid minutes syntnax!')
-}
-
-export const getHours = (input: string) => {
-    if (isAny(input)) {
-        const [min, max] = getMinMaxValues('hours');
-        return createArray(min, max)
-    }
-}
-
-export const getDaysOfMonth = (input: string) => {
-    const [min, max] = getMinMaxValues('daysOfMonth');
-    return createArray(min, max)
-}
-
-export const getMonths = (input: string) => {
-    const [min, max] = getMinMaxValues('months');
-    return createArray(min, max)
-}
-
-export const getDaysOfWeek = (input: string) => {
-    const [min, max] = getMinMaxValues('daysOfWeek');
-    return createArray(min, max)
-}
-
-export const getValues = (input: string, index: number) => {
-    switch (index) {
-        case 0:
-            return getMinutes(input)
-        case 1:
-            return getHours(input)
-        case 2:
-            return getDaysOfMonth(input)
-        case 3:
-            return getMonths(input)
-        case 4:
-            return getDaysOfWeek(input)
-        default:
-            throw new Error('Invalid index passed.')
-    }
+    throw new Error('Invalid syntnax!')
 }
